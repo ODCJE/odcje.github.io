@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>评论系统</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .comment-display {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto; /* 允许内容滚动 */
+            background-color: #f9f9f9;
+        }
+
+        .comment-display .comment {
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .add-comment {
+    border-top: 1px solid #ddd;
+    background: white;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    display: flex;
+    flex-direction: column; /* 整体纵向布局 */
+    align-items: stretch; /* 子元素宽度保持一致 */
+}
+
+.add-comment .input-container {
+    display: flex; /* 输入框容器使用横向布局 */
+    align-items: center; /* 让输入框垂直居中对齐 */
+    margin-bottom: 10px; /* 给输入框和按钮之间增加间距 */
+}
+
+.add-comment input#username {
+    flex: 0; /* 不占据剩余空间，宽度随内容动态变化 */
+    width: 100px; /* 宽度自动适应内容 */
+    padding: 10px;
+    border: 1px solid #ddd; /* 可以保留边框以便更好显示 */
+    border-radius: 5px; /* 可选：添加圆角 */
+    margin-right: 10px; /* 输入框之间的间距 */
+}
+
+.add-comment input#content {
+    flex: 1; /* 内容输入框占据剩余空间 */
+    padding: 10px;
+    border: 1px solid #ddd; /* 可以保留边框以便更好显示 */
+    border-radius: 5px; /* 可选：添加圆角 */
+}
+
+
+.add-comment input:last-child {
+    margin-right: 0; /* 去掉最后一个输入框的右边距 */
+}
+
+.add-comment button {
+    padding: 10px 15px;
+    color: #ffffff;
+    border: 1px solid #252525;
+    background: black;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 100%; /* 按钮宽度与输入框一致 */
+}
+
+
+
+        .add-comment button:hover {
+            color: #989898;
+        }
+
+        /* 手机端适配 */
+        @media (max-width: 600px) {
+            .add-comment input {
+                flex: 1;
+                margin-right: 0; /* 重置右边距 */
+            }
+        }
+
+       
+
+        /* 选中输入框样式 */
+        input[type="text"]:focus {
+            /* 边框取消 */
+            outline: none;
+            /* border: none; */
+        }
+
+       
+            button {
+                font-size: 12px;
+            }
+            .delete-comment {
+                background: none;
+                border: none;
+                /* svg 图标 */
+                
+            }
+    </style>
+    <script type="module">
+        // 导入 Firebase 依赖
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getDatabase, ref, set, get, child, remove, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+        // 配置 Firebase 项目
+        const firebaseConfig = {
+            apiKey: "AIzaSyBJDzOwhps4awDpG_vYYY1Oic8C4utBv7U",
+            authDomain: "jiajiaxin-cf152.firebaseapp.com",
+            databaseURL: "https://jiajiaxin-cf152-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "jiajiaxin-cf152",
+            storageBucket: "jiajiaxin-cf152.firebasestorage.app",
+            messagingSenderId: "967799357882",
+            appId: "1:967799357882:web:75616ac7cc769c42749d83"
+        };
+
+        // 初始化 Firebase 项目
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // 添加评论
+        function addComment() {
+            const commentId = Date.now(); // 使用时间戳作为评论 ID
+            const username = document.getElementById("username").value;
+            const content = document.getElementById("content").value;
+
+            set(ref(database, 'comments/' + commentId), {
+                username: username,
+                content: content,
+                timestamp: commentId // 保存时间戳
+            })
+            .then(() => {
+                alert('评论添加成功！');
+                document.getElementById("content").value = ''; // 清空评论输入框
+                loadComments(); // 更新评论列表
+            })
+            .catch((error) => {
+                console.error('添加评论时出错:', error);
+            });
+        }
+
+        // 加载评论
+        function loadComments() {
+            const dbRef = ref(database, 'comments/');
+            get(dbRef).then((snapshot) => {
+                const commentsContainer = document.getElementById("commentsContainer");
+                commentsContainer.innerHTML = ''; // 清空评论列表
+                
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        const comment = childSnapshot.val();
+                        const commentId = childSnapshot.key;
+                        const commentElement = document.createElement("div");
+                        commentElement.classList.add('comment'); // 添加 class 'comment'
+                        commentElement.innerHTML = `
+                            <strong>${comment.username}</strong>: ${comment.content}
+                            <button class="delete-comment" onclick="deleteComment('${commentId}')">删除</button>
+                        `;
+                        commentsContainer.appendChild(commentElement);
+                    });
+                } else {
+                    commentsContainer.innerHTML = '<p>暂无评论</p>';
+                }
+            }).catch((error) => {
+                console.error('加载评论时出错:', error);
+            });
+        }
+
+        // 删除评论
+window.deleteComment = function(commentId) {
+    remove(ref(database, 'comments/' + commentId))
+    .then(() => {
+        alert('评论删除成功！');
+        loadComments(); // 更新评论列表
+    })
+    .catch((error) => {
+        console.error('删除评论时出错:', error);
+    });
+};
+
+
+        // 页面加载时获取评论
+        document.addEventListener("DOMContentLoaded", () => {
+            loadComments();
+
+            // 为添加评论按钮注册事件监听器
+            document.getElementById("addButton").addEventListener("click", addComment);
+        });
+    </script>
+</head>
+<body>
+    <div id="commentsContainer" class="comment-display">
+        <!-- <div class="comment"><b>张三 :</b> nice</div> -->
+    </div>
+    <div class="add-comment">
+        <div class="input-container">
+            <input id="username" class="comment-input" type="text" placeholder="我的名称">
+            <input id="content" class="comment-input" type="text" placeholder="说点什么...">
+        </div>
+        
+        <button id="addButton">发送</button>
+    </div>
+    
+    
+</body>
+</html>
