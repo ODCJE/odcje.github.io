@@ -49,75 +49,88 @@
             </tr>
         </thead>
         <tbody>
-            <!-- 城镇管理指令 -->
-            <tr><td>/town</td><td>显示城镇信息。</td></tr>
-            <tr><td>/town new [name]</td><td>创建一个新城镇。</td></tr>
-            <tr><td>/town delete [name]</td><td>删除一个城镇（管理员指令）。</td></tr>
-            <tr><td>/town add [player]</td><td>邀请玩家加入城镇。</td></tr>
-            <tr><td>/town kick [player]</td><td>将玩家移出城镇。</td></tr>
-            <tr><td>/town set mayor [player]</td><td>设置新的城镇市长。</td></tr>
-            <tr><td>/town set name [new name]</td><td>更改城镇名称。</td></tr>
-            <tr><td>/town claim</td><td>为城镇占领当前地块。</td></tr>
-            <tr><td>/town unclaim</td><td>取消当前地块的占领。</td></tr>
-            <tr><td>/town spawn</td><td>传送到城镇的出生点。</td></tr>
-            <tr><td>/town deposit [amount]</td><td>向城镇银行存款。</td></tr>
-            <tr><td>/town withdraw [amount]</td><td>从城镇银行取款。</td></tr>
-            <tr><td>/town set board [message]</td><td>设置城镇公告板信息。</td></tr>
-            <tr><td>/town set homeblock</td><td>设置城镇的中心地块。</td></tr>
-            <tr><td>/town rank add [player] [rank]</td><td>为玩家添加城镇头衔。</td></tr>
-            <tr><td>/town rank remove [player] [rank]</td><td>移除玩家的城镇头衔。</td></tr>
-            <!-- 国家管理指令 -->
-            <tr><td>/nation</td><td>显示国家信息。</td></tr>
-            <tr><td>/nation new [name]</td><td>创建一个新国家。</td></tr>
-            <tr><td>/nation delete [name]</td><td>删除一个国家（管理员指令）。</td></tr>
-            <tr><td>/nation add [town]</td><td>邀请城镇加入国家。</td></tr>
-            <tr><td>/nation kick [town]</td><td>将城镇移出国家。</td></tr>
-            <tr><td>/nation set king [player]</td><td>设置新的国家国王。</td></tr>
-            <tr><td>/nation set name [new name]</td><td>更改国家名称。</td></tr>
-            <tr><td>/nation set capital [town]</td><td>设置国家首都。</td></tr>
-            <tr><td>/nation ally add [nation]</td><td>添加盟国。</td></tr>
-            <tr><td>/nation ally remove [nation]</td><td>移除盟国。</td></tr>
-            <tr><td>/nation enemy add [nation]</td><td>添加敌对国家。</td></tr>
-            <tr><td>/nation enemy remove [nation]</td><td>移除敌对国家。</td></tr>
-            <tr><td>/nation deposit [amount]</td><td>向国家银行存款。</td></tr>
-            <tr><td>/nation withdraw [amount]</td><td>从国家银行取款。</td></tr>
-            <tr><td>/nation rank add [player] [rank]</td><td>为玩家添加国家头衔。</td></tr>
-            <tr><td>/nation rank remove [player] [rank]</td><td>移除玩家的国家头衔。</td></tr>
-            <tr><td>/nation spawn</td><td>传送到国家的出生点。</td></tr>
-            <!-- 个人指令 -->
-            <tr><td>/resident</td><td>显示个人信息。</td></tr>
-            <tr><td>/resident set perm</td><td>设置个人默认权限。</td></tr>
-            <tr><td>/resident friend add [player]</td><td>添加好友。</td></tr>
-            <tr><td>/resident friend remove [player]</td><td>移除好友。</td></tr>
-            <tr><td>/resident friend list</td><td>列出所有好友。</td></tr>
-            <!-- 地块管理指令 -->
-            <tr><td>/plot claim</td><td>占领当前地块。</td></tr>
-            <tr><td>/plot unclaim</td><td>放弃当前地块。</td></tr>
-            <tr><td>/plot forsale [price]</td><td>将地块挂牌出售。</td></tr>
-            <tr><td>/plot notforsale</td><td>取消地块的出售状态。</td></tr>
-            <tr><td>/plot set shop</td><td>将地块设置为商店。</td></tr>
-            <tr><td>/plot set embassy</td><td>将地块设置为大使馆。</td></tr>
-            <tr><td>/plot set arena</td><td>将地块设置为竞技场。</td></tr>
-            <tr><td>/plot set farm</td><td>将地块设置为农场。</td></tr>
-            <tr><td>/plot set jail</td><td>将地块设置为监狱。</td></tr>
-            <tr><td>/plot toggle pvp</td><td>切换地块的 PvP 状态。</td></tr>
-            <tr><td>/plot toggle fire</td><td>切换地块的火焰蔓延状态。</td></tr>
-            <tr><td>/plot toggle explosion</td><td>切换地块的爆炸状态。</td></tr>
-            <tr><td>/plot toggle mob</td><td>切换地块的怪物生成状态。</td></tr>
-            <!-- 管理员指令 -->
-            <tr><td>/townyadmin</td><td>访问 Towny 管理员指令。</td></tr>
-            <tr><td>/townyadmin set mayor [town] [player]</td><td>设置城镇的市长。</td></tr>
-            <tr><td>/townyadmin delete town [name]</td><td>删除一个城镇。</td></tr>
-            <tr><td>/townyadmin delete nation [name]</td><td>删除一个国家。</td></tr>
-            <tr><td>/townyadmin toggle war</td><td>切换战争模式。</td></tr>
-            <tr><td>/townyadmin reload</td><td>重新加载 Towny 插件。</td></tr>
-            <tr><td>/townyadmin backup</td><td>创建 Towny 数据备份。</td></tr>
-            <tr><td>/townyadmin reset</td><td>重置 Towny 数据（谨慎使用）。</td></tr>
-            <tr><td>/townyadmin givebonus [town] [amount]</td><td>为城镇提供额外地块奖励。</td></tr>
-            <tr><td>/townyadmin tpplot [world] [x] [z]</td><td>传送到指定地块。</td></tr>
-            <tr><td>/townyadmin resident [player]</td><td>管理玩家的 Towny 数据。</td></tr>
-            <tr><td>/townyadmin town [town]</td><td>管理城镇的 Towny 数据。</td></tr>
-            <tr><td>/townyadmin nation [nation]</td><td>管理国家的 Towny 数据。</td></tr>
+            <!-- 居民指令 -->
+<tr><td>/resident</td><td>显示玩家的居民信息。</td></tr>
+<tr><td>/res ?</td><td>显示居民指令的帮助信息。</td></tr>
+<tr><td>/res friend add [玩家名]</td><td>添加好友，使其获得你的土地权限。</td></tr>
+<tr><td>/res friend remove [玩家名]</td><td>移除好友。</td></tr>
+<tr><td>/res set perm</td><td>设置个人地皮权限。</td></tr>
+
+<!-- 城镇指令 -->
+<tr><td>/town</td><td>显示玩家所在城镇的信息。</td></tr>
+<tr><td>/town ?</td><td>显示城镇指令的帮助信息。</td></tr>
+<tr><td>/town list [页码]</td><td>列出所有城镇。</td></tr>
+<tr><td>/town online</td><td>显示在线的城镇居民。</td></tr>
+<tr><td>/town [城镇名]</td><td>显示指定城镇的信息。</td></tr>
+<tr><td>/town leave</td><td>离开当前城镇（居民指令）。</td></tr>
+<tr><td>/town deposit [$金额]</td><td>向城镇银行捐款。</td></tr>
+<tr><td>/town withdraw [$金额]</td><td>从城镇银行取款（城主指令）。</td></tr>
+<tr><td>/town new [城镇名]</td><td>创建新的城镇。</td></tr>
+<tr><td>/town delete [城镇名]</td><td>删除指定城镇（管理员指令）。</td></tr>
+<tr><td>/town rank add [玩家名] [头衔名]</td><td>为玩家添加城镇头衔。</td></tr>
+<tr><td>/town rank remove [玩家名] [头衔名]</td><td>移除玩家的城镇头衔。</td></tr>
+<tr><td>/town set mayor [居民名]</td><td>任命新的城主。</td></tr>
+<tr><td>/town set homeblock</td><td>设置城镇的主地块。</td></tr>
+<tr><td>/town set spawn</td><td>设置城镇的出生点。</td></tr>
+<tr><td>/town set name [新城镇名]</td><td>更改城镇名称。</td></tr>
+<tr><td>/town set tag [标签]</td><td>设置城镇标签。</td></tr>
+<tr><td>/town toggle pvp</td><td>切换城镇的 PvP 设置。</td></tr>
+<tr><td>/town toggle public</td><td>切换城镇是否公开。</td></tr>
+<tr><td>/town toggle explosion</td><td>切换城镇的爆炸设置。</td></tr>
+<tr><td>/town toggle fire</td><td>切换城镇的火焰蔓延设置。</td></tr>
+<tr><td>/town toggle mobs</td><td>切换城镇的怪物生成设置。</td></tr>
+<tr><td>/town claim</td><td>声明当前区块为城镇领地。</td></tr>
+<tr><td>/town unclaim</td><td>放弃当前区块的城镇领地。</td></tr>
+<tr><td>/town claim outpost</td><td>声明前哨基地。</td></tr>
+<tr><td>/town unclaim outpost</td><td>放弃前哨基地。</td></tr>
+<tr><td>/town outpost list</td><td>列出城镇的前哨基地。</td></tr>
+<tr><td>/town outlaw add [玩家名]</td><td>将玩家列为城镇的放逐者。</td></tr>
+<tr><td>/town outlaw remove [玩家名]</td><td>移除玩家的放逐者状态。</td></tr>
+<tr><td>/town outlawlist</td><td>查看城镇的放逐者列表。</td></tr>
+<tr><td>/town say [消息]</td><td>向城镇居民广播消息。</td></tr>
+
+<!-- 国家指令 -->
+<tr><td>/nation</td><td>显示玩家所在国家的信息。</td></tr>
+<tr><td>/nation ?</td><td>显示国家指令的帮助信息。</td></tr>
+<tr><td>/nation list [页码]</td><td>列出所有国家。</td></tr>
+<tr><td>/nation online</td><td>显示在线的国家成员。</td></tr>
+<tr><td>/nation [国家名]</td><td>显示指定国家的信息。</td></tr>
+<tr><td>/nation leave</td><td>离开当前国家（城主指令）。</td></tr>
+<tr><td>/nation deposit [$金额]</td><td>向国家银行捐款。</td></tr>
+<tr><td>/nation withdraw [$金额]</td><td>从国家银行取款（国王指令）。</td></tr>
+<tr><td>/nation new [国家名]</td><td>创建新的国家。</td></tr>
+<tr><td>/nation delete [国家名]</td><td>删除指定国家（管理员指令）。</td></tr>
+<tr><td>/nation rank add [玩家名] [头衔名]</td><td>为玩家添加国家头衔。</td></tr>
+<tr><td>/nation rank remove [玩家名] [头衔名]</td><td>移除玩家的国家头衔。</td></tr>
+<tr><td>/nation ally add [国家名]</td><td>添加盟国。</td></tr>
+<tr><td>/nation ally remove [国家名]</td><td>移除盟国。</td></tr>
+<tr><td>/nation enemy add [国家名]</td><td>添加敌国。</td></tr>
+<tr><td>/nation enemy remove [国家名]</td><td>移除敌国。</td></tr>
+<tr><td>/nation set king [居民名]</td><td>任命新的国王。</td></tr>
+<tr><td>/nation set capital [城镇名]</td><td>设置国家的首都。</td></tr>
+<tr><td>/nation set taxes [$金额]</td><td>设置国家税收。</td></tr>
+<tr><td>/nation set name [新国家名]</td><td>更改国家名称。</td></tr>
+<tr><td>/nation set tag [标签]</td><td>设置国家标签。</td></tr>
+<tr><td>/nation toggle neutral</td><td>切换国家的中立状态。</td></tr>
+<tr><td>/nation say [消息]</td><td>向国家成员广播消息。</td></tr>
+
+<!-- 地皮指令 -->
+<tr><td>/plot</td><td>显示地皮信息。</td></tr>
+<tr><td>/plot claim</td><td>购买一块地皮。</td></tr>
+<tr><td>/plot unclaim</td><td>放弃一块地皮。</td></tr>
+<tr><td>/plot set perm</td><td>设置地皮权限。</td></tr>
+<tr><td>/plot set name [名称]</td><td>为地皮设置名称。</td></tr>
+<tr><td>/plot set shop</td><td>将地皮设置为商店类型。</td></tr>
+<tr><td>/plot set embassy</td><td>将地皮设置为大使馆类型。</td></tr>
+<tr><td>/plot set arena</td><td>将地皮设置为竞技场类型。</td></tr>
+<tr><td>/plot set farm</td><td>将地皮设置为农场类型。</td></tr>
+<tr><td>/plot set inn</td><td>将地皮设置为旅馆类型。</td></tr>
+<tr><td>/plot set jail</td><td>将地皮设置为监狱类型。</td></tr>
+<tr><td>/plot toggle pvp</td><td>切换地皮的 PvP 设置。</td></tr>
+<tr><td>/plot toggle explosion</td><td>切换地皮的爆炸设置。</td></tr>
+<tr><td>/plot toggle fire</td><td>切换地皮的火焰蔓延设置。</td></tr>
+<tr><td>/plot toggle mobs</td><td>切换地皮的怪物生成设置。</td></tr>
+
         </tbody>
     </table>
     <script>
