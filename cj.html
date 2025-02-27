@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>适配页面</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden; /* 防止背景图溢出屏幕 */
+        }
+        
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            flex-direction: column;
+            position: relative;
+            z-index: 2;
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover; /* 背景图自适应容器大小 */
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* 提醒点击的摇晃动画 */
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-10px);
+            }
+            50% {
+                transform: translateX(10px);
+            }
+            75% {
+                transform: translateX(-10px);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        .bottom-button {
+            width: 242px;
+            height: 234px;
+            background-image: url('img/bottom.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            cursor: pointer;
+            z-index: 2;
+            animation: shake 1s ease-in-out infinite; /* 默认的摇晃动画 */
+        }
+
+        .title {
+            width: 791px;
+            height: 93px;
+            background-image: url('img/title.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: 2;
+        }
+
+        /* PC样式 */
+        @media (min-width: 1024px) {
+            .background {
+                background-image: url('img/bg (1).jpg');
+            }
+        }
+
+        /* 手机样式 */
+        @media (max-width: 1023px) {
+            .background {
+                background-image: url('img/bg (2).jpg');
+            }
+            .bottom-button {
+                width: 120px;
+                height: 118px;
+            }
+            .title {
+                width: 400px;
+                height: 49px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="container">
+        <div id="raffleButton" class="bottom-button" onclick="stopShake()"></div>
+        <div class="title"></div>
+    </div>
+
+    <script>
+        let isShaking = true; // 标志位，控制动画状态
+
+        // 停止摇晃动画
+        function stopShake() {
+            if (!isShaking) return; // 如果动画已经停止，则不再处理
+
+            alert('点击成功！');
+            const button = document.querySelector('.bottom-button');
+            // 直接移除动画属性
+            button.style.animation = 'none';  
+            isShaking = false; // 更新标志位
+        }
+
+
+
+        
+    </script>
+    <script type="module">
+        // 导入 Firebase 依赖
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getDatabase, ref, set, get, child, remove, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+    
+        // 配置 Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBJDzOwhps4awDpG_vYYY1Oic8C4utBv7U",
+            authDomain: "jiajiaxin-cf152.firebaseapp.com",
+            databaseURL: "https://jiajiaxin-cf152-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "jiajiaxin-cf152",
+            storageBucket: "jiajiaxin-cf152.appspot.com", // 修正 Storage URL
+            messagingSenderId: "967799357882",
+            appId: "1:967799357882:web:75616ac7cc769c42749d83"
+        };
+    
+        // 初始化 Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+    
+        document.getElementById("raffleButton").addEventListener("click", async function () {
+            // 获取数据
+            const userRef = ref(database, "cj");
+            const snapshot = await get(userRef);
+    
+            if (!snapshot.exists()) {
+                alert("奖品或参与者名单不存在！");
+                return;
+            }
+    
+            const prizes = snapshot.val().prizes || [];
+            const names = snapshot.val().names || [];
+
+            
+            console.log("奖品列表:", prizes);
+            console.log("参与者名单:", names);
+    
+            let inputName = prompt("请输入您的姓名:");
+            if (!inputName) {
+                alert("请输入有效的姓名");
+                return;
+            }
+    
+            if (!names.includes(inputName)) {
+                alert("您的姓名不在名单中，无法参与抽奖！");
+                return;
+            }
+    
+            // 计算中奖概率
+            let probability = 1 / names.length;
+            let randomNum1 = Math.random();
+            let randomNum = randomNum1;
+    
+            
+                let prize = prizes[Math.floor(Math.random() * prizes.length)];
+                alert(`恭喜 ${inputName} 获得奖品: ${prize}`);
+                console.log(` ${inputName} 获得奖品: ${prize}`+"\n");
+
+                // 存储中奖者和奖品到数据库
+                await set(child(userRef, "winners/" + inputName), {
+                    [inputName]: prize
+                });
+                console.log("已存储中奖者和奖品到数据库");
+
+                // 删除数组中奖者和奖品,并更新数据库
+                names.splice(names.indexOf(inputName), 1);
+                console.log("已移除数据库名单中的 " + inputName);
+                prizes.splice(prizes.indexOf(prize), 1);
+                console.log("已移除数据库奖品中的 " + prize);
+
+                await update(userRef, {
+                    prizes: prizes,
+                    names: names
+                });
+                console.log("--------------------------");
+        });
+    </script>
+</body>
+</html>
