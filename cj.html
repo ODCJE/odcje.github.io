@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>咸鱼同盟 | 在线抽奖</title>
+    <title>夏荷秋菊 | 在线抽奖</title>
+    <!-- 引入SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
         body, html {
             margin: 0;
@@ -11,7 +13,7 @@
             height: 100%;
             overflow: hidden; /* 防止背景图溢出屏幕 */
         }
-        
+
         .container {
             display: flex;
             justify-content: center;
@@ -77,7 +79,6 @@
             .background {
                 background-image: url('img/bg (1).jpg');
             }
-            
         }
 
         /* 手机样式 */
@@ -93,6 +94,58 @@
                 width: 80%;
                 /* height: 49px; */
             }
+        }
+
+        /* 自定义SweetAlert2样式 */
+        .swal2-popup {
+            border-radius: 0px; /* 修改弹窗圆角 */
+            background-image: url('img/alterbg.png'); /* 修改弹窗背景 */
+            background-color: rgba(255, 255, 255, 0.9); /* 弹窗背景色 */
+            backdrop-filter: blur(5px); /* 弹窗背景模糊 */
+        }
+
+        .swal2-title {
+            color: #dbd876; /* 修改标题文字颜色 */
+            font-family: '宋体', sans-serif; /* 修改标题字体 */
+            font-size: 14px; /* 修改标题字号 */
+        }
+
+        .swal2-input {
+            border-radius: 0px; /* 修改输入框圆角 */
+            border: 3px double #000000; /* 修改输入框边框颜色 */
+            background: #ecf0f1; /* 修改输入框背景色 */
+        }
+
+        /* 输入框焦点样式 */
+        .swal2-input:focus {
+            outline: none;
+            /* 去除输入框默认边框 */
+            box-shadow: none;
+            border: 3px double #dbd876; /* 修改输入框边框颜色 */
+        }
+
+        .swal2-button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .swal2-confirm, .swal2-cancel {
+            border-radius: 0px; /* 修改按钮圆角 */
+            background: #ffffff; /* 修改按钮背景色 */
+            color: rgb(0, 0, 0); /* 修改按钮文字颜色 */
+            font-size: 14px; /* 修改按钮字号 */
+            padding: 10px 20px; /* 修改按钮边距 */
+        }
+
+        .swal2-confirm:hover, .swal2-cancel:hover {
+            /* 变小 */
+            transform: scale(0.9);
+        }
+
+        /* 弹框背景模糊 */
+        .swal2-container {
+            backdrop-filter: blur(5px);
         }
     </style>
 </head>
@@ -110,22 +163,19 @@
         function stopShake() {
             if (!isShaking) return; // 如果动画已经停止，则不再处理
 
-            
             const button = document.querySelector('.bottom-button');
             // 直接移除动画属性
             button.style.animation = 'none';  
             isShaking = false; // 更新标志位
         }
-
-
-
-        
     </script>
+    <!-- 引入SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module">
         // 导入 Firebase 依赖
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
         import { getDatabase, ref, set, get, child, remove, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
-    
+
         // 配置 Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyBJDzOwhps4awDpG_vYYY1Oic8C4utBv7U",
@@ -136,66 +186,112 @@
             messagingSenderId: "967799357882",
             appId: "1:967799357882:web:75616ac7cc769c42749d83"
         };
-    
+
         // 初始化 Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
-    
+
         document.getElementById("raffleButton").addEventListener("click", async function () {
             // 获取数据
             const userRef = ref(database, "cj");
             const snapshot = await get(userRef);
-    
+
             if (!snapshot.exists()) {
-                alert("奖品或参与者名单不存在！");
+                Swal.fire({
+                    title: '警告',
+                    text: '奖品或参与者名单不存在！',
+                    icon: 'warning',
+                    customClass: {
+                        popup: 'swal2-popup',
+                        title: 'swal2-title',
+                        confirmButton: 'swal2-confirm',
+                    }
+                });
                 return;
             }
-    
+
             const prizes = snapshot.val().prizes || [];
             const names = snapshot.val().names || [];
 
-            
             console.log("奖品列表:", prizes);
             console.log("参与者名单:", names);
-    
-            let inputName = prompt("请输入您的姓名:");
+
+            // 使用SweetAlert2的自定义输入框
+            const { value: inputName } = await Swal.fire({
+                title: '请输入您的姓名',
+                input: 'text',
+                inputPlaceholder: '请输入您的姓名',
+                showCancelButton: true,
+                confirmButtonText: '确认',
+                cancelButtonText: '取消',
+                inputValidator: (value) => {
+                    if (!value) {
+                        return '请输入有效的姓名';
+                    }
+                },
+                customClass: {
+                    popup: 'swal2-popup',
+                    title: 'swal2-title',
+                    input: 'swal2-input',
+                    confirmButton: 'swal2-confirm',
+                    cancelButton: 'swal2-cancel',
+                    buttonContainer: 'swal2-button-container'
+                }
+            });
+
             if (!inputName) {
-                alert("请输入有效的姓名");
                 return;
             }
-    
+
             if (!names.includes(inputName)) {
-                alert("您的姓名不在名单中，无法参与抽奖！");
+                Swal.fire({
+                    title: '警告',
+                    text: '您的姓名不在名单中，无法参与抽奖！',
+                    icon: 'warning',
+                    customClass: {
+                        popup: 'swal2-popup',
+                        title: 'swal2-title',
+                        confirmButton: 'swal2-confirm',
+                    }
+                });
                 return;
             }
-    
+
             // 计算中奖概率
             let probability = 1 / names.length;
             let randomNum1 = Math.random();
             let randomNum = randomNum1;
-    
-            
-                let prize = prizes[Math.floor(Math.random() * prizes.length)];
-                alert(`恭喜 ${inputName} 获得奖品: ${prize}`);
-                console.log(` ${inputName} 获得奖品: ${prize}`+"\n");
 
-                // 存储中奖者和奖品到数据库
-                await set(child(userRef, "winners/" + inputName), {
-                    [inputName]: prize
-                });
-                console.log("已存储中奖者和奖品到数据库");
+            let prize = prizes[Math.floor(Math.random() * prizes.length)];
+            Swal.fire({
+                title: '恭喜',
+                text: `${inputName} 获得奖品: ${prize}`,
+                icon: 'success',
+                customClass: {
+                    popup: 'swal2-popup',
+                    title: 'swal2-title',
+                    confirmButton: 'swal2-confirm',
+                }
+            });
+            console.log(` ${inputName} 获得奖品: ${prize}` + "\n");
 
-                // 删除数组中奖者和奖品,并更新数据库
-                names.splice(names.indexOf(inputName), 1);
-                console.log("已移除数据库名单中的 " + inputName);
-                prizes.splice(prizes.indexOf(prize), 1);
-                console.log("已移除数据库奖品中的 " + prize);
+            // 存储中奖者和奖品到数据库
+            await set(child(userRef, "winners/" + inputName), {
+                [inputName]: prize
+            });
+            console.log("已存储中奖者和奖品到数据库");
 
-                await update(userRef, {
-                    prizes: prizes,
-                    names: names
-                });
-                console.log("--------------------------");
+            // 删除数组中奖者和奖品,并更新数据库
+            names.splice(names.indexOf(inputName), 1);
+            console.log("已移除数据库名单中的 " + inputName);
+            prizes.splice(prizes.indexOf(prize), 1);
+            console.log("已移除数据库奖品中的 " + prize);
+
+            await update(userRef, {
+                prizes: prizes,
+                names: names
+            });
+            console.log("--------------------------");
         });
     </script>
 </body>
