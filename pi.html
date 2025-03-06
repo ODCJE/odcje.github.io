@@ -3,27 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>腾讯定位示例</title>
-    <script src="https://map.qq.com/api/gljs?v=1.exp&key=Y7NBZ-6EOLI-4FDGL-U6XJT-WTTP5-MYBAV"></script>
+    <title>高德地图定位</title>
+    <script src="https://webapi.amap.com/maps?v=1.4.15&key=f4e1a2b42c193215d9c17082fdbeeb41"></script>
 </head>
 <body>
+    <h1>您的当前位置：</h1>
+    <p id="location">正在获取您的位置...</p>
+
     <script>
-        var geo = new qq.maps.Geolocation('Y7NBZ-6EOLI-4FDGL-U6XJT-WTTP5-MYBAV', 'myapp');
-        geo.getLocation(function(position) {
-            console.log("经纬度: ", position.lat + ", " + position.lng);
-        }, function(error) {
-            // 如果 IP 定位失败，可以尝试使用浏览器的 getCurrentPosition 来获取 GPS 定位
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    console.log("GPS 定位经纬度: ", position.coords.latitude + ", " + position.coords.longitude);
-                }, function() {
-                    console.error("无法获取定位信息");
+        // 初始化高德地图地理编码服务
+        var geocoder = new AMap.Geocoder();
+
+        // 获取用户当前位置
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var lat = position.coords.latitude;  // 纬度
+                var lon = position.coords.longitude; // 经度
+
+                // 使用地理编码API将经纬度转换为地址
+                geocoder.getAddress([lon, lat], function(status, result) {
+                    if (status === 'complete' && result.regeocode) {
+                        // 更新页面显示中文地址
+                        document.getElementById("location").innerText = "当前位置： " + result.regeocode.formattedAddress;
+                    } else {
+                        document.getElementById("location").innerText = "获取地址失败";
+                    }
                 });
-            } else {
-                console.error("浏览器不支持定位");
-            }
-        });
+            }, function() {
+                document.getElementById("location").innerText = "定位失败";
+            });
+        } else {
+            document.getElementById("location").innerText = "浏览器不支持定位";
+        }
     </script>
-    
 </body>
 </html>
