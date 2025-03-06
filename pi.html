@@ -8,25 +8,22 @@
 </head>
 <body>
     <script>
-        // 创建定位对象
         var geo = new qq.maps.Geolocation('Y7NBZ-6EOLI-4FDGL-U6XJT-WTTP5-MYBAV', 'myapp');
-        
-        // 获取当前位置
         geo.getLocation(function(position) {
-            // 打印经纬度
-            console.log("当前位置的经纬度: ", position.lat + ", " + position.lng);
-
-            // 反向地理编码获取详细地址
-            var geocoder = new qq.maps.Geocoder({
-                complete: function(result) {
-                    // 打印地址
-                    console.log("用户所在地：", result.detail.address);
-                }
-            });
-            geocoder.getAddress(new qq.maps.LatLng(position.lat, position.lng));
+            console.log("经纬度: ", position.lat + ", " + position.lng);
         }, function(error) {
-            console.error("定位失败: ", error);
+            // 如果 IP 定位失败，可以尝试使用浏览器的 getCurrentPosition 来获取 GPS 定位
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    console.log("GPS 定位经纬度: ", position.coords.latitude + ", " + position.coords.longitude);
+                }, function() {
+                    console.error("无法获取定位信息");
+                });
+            } else {
+                console.error("浏览器不支持定位");
+            }
         });
     </script>
+    
 </body>
 </html>
