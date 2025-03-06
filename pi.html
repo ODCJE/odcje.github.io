@@ -1,48 +1,94 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
-    <title>根据ip定位</title>
-    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/> 
-    <style type="text/css">
-       html,body,#container{
-           height:100%;
-       }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP地址与翻译示例</title>
 </head>
 <body>
-<div id="container"></div>
-<div class="info">
-    <p id='info'></p>
-</div>
-<script type="text/javascript" src="//webapi.amap.com/maps?v=2.0&key=f4e1a2b42c193215d9c17082fdbeeb41&plugin=AMap.CitySearch"></script>
-<script type="text/javascript">
-    var map = new AMap.Map("container", {
-        center: [116.397428, 39.90923],
-        zoom: 13
-    });
-    //获取用户所在城市信息
-    function showCityInfo() {
-        //实例化城市查询类
-        var citysearch = new AMap.CitySearch();
-        //自动获取用户IP，返回当前城市
-        citysearch.getLocalCity(function(status, result) {
-            if (status === 'complete' && result.info === 'OK') {
-                if (result && result.city && result.bounds) {
-                    var cityinfo = result.city;
-                    var citybounds = result.bounds;
-                    document.getElementById('info').innerHTML = '您当前所在城市：'+cityinfo;
-                    //地图显示当前城市
-                    map.setBounds(citybounds);
+    <h1>获取用户IP地址并翻译地址</h1>
+    <div id="location"></div>
+    
+    <script>
+        // 获取用户IP地址并调用IPinfo.io API
+        fetch('https://ipinfo.io/json?token=0a2f721b58c91a')
+            .then(response => response.json())
+            .then(data => {
+                const ipAddress = data.ip;
+                const location = data.city + ", " + data.region + ", " + data.country;
+                
+                // 显示IP地址及其位置
+                document.getElementById('location').innerHTML = `IP地址: ${ipAddress}<br>位置: ${location}`;
+                
+                // 调用有道翻译API进行翻译
+                translateToChinese(location);
+            })
+            .catch(error => {
+                console.error("获取IP地址信息失败: ", error);
+            });
+
+        // 使用有道翻译API将地址翻译成中文
+        function translateToChinese(text) {
+            const apiUrl = 'https://openapi.youdao.com/api';
+            const appKey = '29b31de202fb90ba';
+            const appSecret = 'JQRt3ZdjQGZV5SgJCi68GwrHcExQCfNX';
+
+            const salt = Math.random();
+            const curTime = Math.round(new Date().getTime() / 1000);
+            const sign = generateSign(text, appKey, salt, curTime, appSecret);
+
+            const params = new URLSearchParams();
+            params.append('q', text);
+            params.append('from', 'auto');
+            params.append('to', 'zh-CHS');
+            params.append('appKey', appKey);
+            params.append('salt', salt);
+            params.append('sign', sign);
+            params.append('signType', 'v3');
+            params.append('curtime', curTime);
+
+            fetch(apiUrl, {
+                method: 'POST',
+                body: params
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.errorCode === '0') {
+                    // 输出翻译结果
+                    document.getElementById('location').innerHTML += `<br>翻译后的地址: ${data.translateResult[0][0].tgt}`;
+                } else {
+                    console.error('翻译失败:', data.errorCode);
                 }
+            })
+            .catch(error => {
+                console.error('请求翻译失败:', error);
+            });
+        }
+
+        // 生成签名
+        function generateSign(q, appKey, salt, curTime, appSecret) {
+            const signStr = appKey + truncate(q) + salt + curTime + appSecret;
+            return md5(signStr);
+        }
+
+        // 对字符串进行MD5加密
+        function md5(string) {
+            return CryptoJS.MD5(string).toString(CryptoJS.enc.Hex);
+        }
+
+        // 截取输入文本
+        function truncate(q) {
+            const len = q.length;
+            if (len <= 20) {
+                return q;
+            } else if (len <= 100) {
+                return q.substring(0, 20) + len + q.substring(len - 20, len);
             } else {
-                document.getElementById('info').innerHTML = result.info;
+                return q.substring(0, 20) + len + q.substring(len - 20, len);
             }
-        });
-    }
-    showCityInfo();
-</script>
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1-crypto-js.js"></script>
 </body>
 </html>
