@@ -11,24 +11,14 @@
     <p id="location">正在获取您的位置...</p>
 
     <script>
-        // 初始化高德地图地理编码服务
-        var geocoder = new AMap.Geocoder();
-
         // 获取用户当前位置
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 var lat = position.coords.latitude;  // 纬度
                 var lon = position.coords.longitude; // 经度
 
-                // 使用地理编码API将经纬度转换为地址
-                geocoder.getAddress([lon, lat], function(status, result) {
-                    if (status === 'complete' && result.regeocode) {
-                        // 更新页面显示中文地址
-                        document.getElementById("location").innerText = "当前位置： " + result.regeocode.formattedAddress;
-                    } else {
-                        document.getElementById("location").innerText = "获取地址失败";
-                    }
-                });
+                // 更新页面文本
+                document.getElementById("location").innerText = "纬度: " + lat + ", 经度: " + lon;
             }, function() {
                 document.getElementById("location").innerText = "定位失败";
             });
