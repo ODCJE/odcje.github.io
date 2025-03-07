@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>百度地图获取用户地址</title>
+    <title>百度地图获取详细地址</title>
     <script type="text/javascript" src="https://api.map.baidu.com/api?v=3.0&ak=sxuYeFztjuPh8P2xF9ZxhmVQTsrdWbtP"></script>
 </head>
 <body>
@@ -14,15 +14,26 @@
         function getLocation() {
             var geolocation = new BMapGL.Geolocation();
             geolocation.getCurrentPosition(function (result) {
-                if (this.getStatus() === BMAP_STATUS_SUCCESS) {
+                if (this.getStatus() === 0) { // 0 表示成功
                     var point = result.point;
                     var geoc = new BMapGL.Geocoder();
                     geoc.getLocation(point, function (res) {
-                        var address = res.address;
-                        document.getElementById("address").innerText = "当前地址：" + address;
+                        var comp = res.addressComponents; // 获取详细地址信息
+                        var fullAddress = `${comp.province}${comp.city}${comp.district}${comp.street}${comp.streetNumber}`;
+                        document.getElementById("address").innerText = "当前地址：" + fullAddress;
                     });
                 } else {
-                    document.getElementById("address").innerText = "定位失败：" + this.getStatus();
+                    let errorMsg = {
+                        2: "位置结果未知",
+                        3: "导航结果未知",
+                        4: "非法密钥",
+                        5: "非法请求",
+                        6: "没有权限",
+                        7: "服务不可用",
+                        8: "超时"
+                    };
+                    document.getElementById("address").innerText =
+                        "定位失败：" + (errorMsg[this.getStatus()] || "未知错误");
                 }
             });
         }
