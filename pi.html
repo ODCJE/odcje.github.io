@@ -15,32 +15,49 @@
 
         // 根据 IP 地址获取当前城市
         function getLocationByIP() {
-            var geolocation = new BMapGL.LocalCity(); // 创建本地城市实例
-            geolocation.get(function (result) { // 获取当前城市
-                console.log("IP 定位结果：", result); // 打印结果
+            var geolocation = new BMapGL.LocalCity();// 创建本地城市实例
+            geolocation.get(function (result) {// 获取当前城市
+                console.log("IP 定位结果：", result);// 打印结果
                 document.getElementById("address").innerText = "当前城市：" + result.name;
-                getAddressByIP(result.name); // 获取详细地址
+                getIP(result.name); // 获取 IP 地址后调用 getIP 函数，这里假设可以这样获取，实际可能需要通过其他接口
             });
+        }
+
+        // 获取用户 IP 地址
+        function getIP(cityName) {
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    ip = data.ip;
+                    getAddressByIP(cityName);
+                })
+                .catch(error => console.error('Error fetching IP:', error));
         }
 
         // 根据 IP 地址获取当前详细地址
         function getAddressByIP(cityName) {
-            var url = "https://sp0.baidu.com/8aQDcjqpAAV3otqbppnN2DJv/api.php?query=" + encodeURIComponent(cityName) + "&co=&resource_id=6006&ie=utf8&oe=gbk&cb=op_aladdin_callback";
+            var url = "https://sp0.baidu.com/8aQDcjqpAAV3otqbppnN2DJv/api.php?query=" + ip + "&co=&resource_id=6006&ie=utf8&oe=gbk&cb=handleAddress";
             var script = document.createElement("script");
             script.type = "text/javascript";
             script.src = url;
             document.body.appendChild(script);
+        }
 
-            window.op_aladdin_callback = function(data) {
-                if (data && data.content && data.content.address) {
-                    document.getElementById("address2").innerText = "详细地址：" + data.content.address;
-                } else {
-                    document.getElementById("address2").innerText = "无法获取详细地址";
-                }
+        // 处理详细地址的回调函数
+        function handleAddress(data) {
+            if (data.content) {
+                console.log("详细地址结果：", data.content.address_detail);
+                document.getElementById("address2").innerText = "详细地址：" + data.content.address_detail.city + data.content.address_detail.district + data.content.address_detail.street + data.content.address_detail.street_number;
+            } else {
+                document.getElementById("address2").innerText = "无法获取详细地址";
             }
         }
 
         window.onload = loadBaiduMap;
+
+        // 声明 ip 变量
+        var ip = "";
+
     </script>
 </head>
 <body>
