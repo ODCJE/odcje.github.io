@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>百度地图 IP 定位</title>
     <script type="text/javascript">
+        // 加载百度地图 API
         function loadBaiduMap() {
             var script = document.createElement("script");
             script.type = "text/javascript";
@@ -12,12 +13,31 @@
             document.body.appendChild(script);
         }
 
+        // 根据 IP 地址获取当前城市
         function getLocationByIP() {
-            var geolocation = new BMapGL.LocalCity();
-            geolocation.get(function (result) {
-                console.log("IP 定位结果：", result);
+            var geolocation = new BMapGL.LocalCity(); // 创建本地城市实例
+            geolocation.get(function (result) { // 获取当前城市
+                console.log("IP 定位结果：", result); // 打印结果
                 document.getElementById("address").innerText = "当前城市：" + result.name;
+                getAddressByIP(result.name); // 获取详细地址
             });
+        }
+
+        // 根据 IP 地址获取当前详细地址
+        function getAddressByIP(cityName) {
+            var url = "https://sp0.baidu.com/8aQDcjqpAAV3otqbppnN2DJv/api.php?query=" + encodeURIComponent(cityName) + "&co=&resource_id=6006&ie=utf8&oe=gbk&cb=op_aladdin_callback";
+            var script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src = url;
+            document.body.appendChild(script);
+
+            window.op_aladdin_callback = function(data) {
+                if (data && data.content && data.content.address) {
+                    document.getElementById("address2").innerText = "详细地址：" + data.content.address;
+                } else {
+                    document.getElementById("address2").innerText = "无法获取详细地址";
+                }
+            }
         }
 
         window.onload = loadBaiduMap;
@@ -26,5 +46,6 @@
 <body>
     <h2>您的当前城市：</h2>
     <p id="address">正在获取位置...</p>
+    <p id="address2">正在获取详细地址...</p>
 </body>
 </html>
