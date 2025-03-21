@@ -24,43 +24,45 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // 存储地址到 Firebase ip/
-        function storeAddressToFirebase(address) {
-            console.log("开始存储地址到 Firebase:", address);
+        // 将 storeAddressToFirebase 定义为全局变量
+        window.storeAddressToFirebase = function(address) {
             const ipRef = ref(database, "ip");
             set(ipRef, address).then(() => {
-                console.log("地址已成功存储到 Firebase");
+                console.log('地址已成功存储到 Firebase:', address);
             }).catch((error) => {
-                console.error("存储地址到 Firebase 时出错:", error);
+                console.error('存储地址到 Firebase 时出错:', error);
             });
-        }
+        };
     </script>
     <script type="text/javascript">
         // 加载百度地图 API
         function loadBaiduMap() {
-            console.log("开始加载百度地图 API");
             var script = document.createElement("script");
             script.type = "text/javascript";
             script.src = "https://api.map.baidu.com/api?type=webgl&v=1.0&ak=sxuYeFztjuPh8P2xF9ZxhmVQTsrdWbtP&callback=getLocationByIP";
+            script.onload = function() {
+                console.log('百度地图 API 已加载，开始获取当前位置');
+            };
+            script.onerror = function() {
+                console.error('百度地图 API 加载失败');
+            };
             document.body.appendChild(script);
+            console.log('开始加载百度地图 API');
         }
 
         // 根据 IP 地址获取当前城市
         function getLocationByIP() {
-            console.log("百度地图 API 已加载，开始获取当前位置");
             var geolocation = new BMapGL.LocalCity(); // 创建本地城市实例
             geolocation.get(function (result) { // 获取当前城市
                 console.log("IP 定位结果：", result); // 打印结果
-                if (result && result.name) {
-                    document.getElementById("address").innerText = "当前城市：" + result.name;
-                    storeAddressToFirebase(result.name); // 存储地址到 Firebase
+                document.getElementById("address").innerText = "当前城市：" + result.name;
+                if (window.storeAddressToFirebase) {
+                    window.storeAddressToFirebase(result.name); // 存储地址到 Firebase
                 } else {
-                    console.error("无法获取当前位置信息", result);
-                    document.getElementById("address").innerText = "无法获取当前位置信息";
+                    console.error('storeAddressToFirebase 函数未定义');
                 }
-            }, function (error) {
-                console.error("获取当前位置时出错:", error);
-                document.getElementById("address").innerText = "获取位置出错，请重试";
+            }, function(error) {
+                console.error('获取位置失败:', error);
             });
         }
 
@@ -70,6 +72,5 @@
 <body>
     <h2>您的当前城市：</h2>
     <p id="address">正在获取位置...</p>
-
 </body>
 </html>
