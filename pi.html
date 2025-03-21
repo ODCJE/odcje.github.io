@@ -24,20 +24,10 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // 存储地址到数据库
-        function storeAddressToFirebase(cityName) {
-            // 定义路径
-            const userRef = ref(database, "address/" + new Date().toLocaleDateString());
-            // 定义数据
-            const address = {
-                address: "当前城市：" + cityName
-            };
-            // 添加数据
-            set(userRef, address).then(() => {
-                console.log("数据已成功存储到 Firebase");
-            }).catch((error) => {
-                console.error("存储数据到 Firebase 时出错: ", error);
-            });
+        // 存储地址到 Firebase
+        function storeAddressToFirebase(address) {
+            const addressRef = ref(database, "address");
+            set(addressRef, address);
         }
     </script>
     <script type="text/javascript">
