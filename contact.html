@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>联系我</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SimSun', 'Times New Roman', serif;
+            background-color: #fff;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        /* 中心内容样式 */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .main-content .title {
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .icons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .icon-circle {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #000;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .icon-circle img {
+            width: 60%;
+            height: 60%;
+            object-fit: contain;
+            opacity: 1;
+            transition: opacity 0.4s ease; /* 平滑过渡效果 */
+        }
+        .icon-circle img:hover {
+            opacity: 0.7;
+        }
+
+        /* 电脑端样式 (屏幕宽度 >= 1024px) */
+        @media (min-width: 1024px) {
+            .main-content .title {
+                font-size: 32px;
+            }
+
+            .icon-circle {
+                width: 60px;
+                height: 60px;
+            }
+
+            .icons {
+                gap: 30px;
+            }
+        }
+
+        /* 平板端样式 (屏幕宽度 768px - 1023px) */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .main-content .title {
+                font-size: 28px;
+            }
+
+            .icon-circle {
+                width: 50px;
+                height: 50px;
+            }
+
+            .icons {
+                gap: 25px;
+            }
+        }
+
+        /* 移动端样式 (屏幕宽度 < 768px) */
+        @media (max-width: 767px) {
+            .main-content .title {
+                font-size: 22px;
+            }
+
+            .icon-circle {
+                width: 40px;
+                height: 40px;
+            }
+
+            .icons {
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <p class="title">联系我</p>
+        <div class="icons">
+            <div class="icon-circle">
+                <a href="https://gd-hbimg.huaban.com/8d84cbdfe13bf4f2841c3994502eaa07d9c15cd521020-0R5bWK_fw1200webp" target="_blank">
+                    <img src="resources\img\QQ.png" alt="QQ Icon">
+                </a>
+                
+            </div>
+            <div class="icon-circle">
+               <a href="https://gd-hbimg.huaban.com/49fe35d87ec4e7c6b1dccae9cd003d59c2666417206be-vBIVgJ_fw1200webp" target="_blank">
+                <img src="resources\img\WeChat.png" alt="WeChat Icon">
+               </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
