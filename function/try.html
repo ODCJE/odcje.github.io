@@ -1,0 +1,52 @@
+<!DOCTYPE html lang="zh-cn">
+<html>
+<head>
+  <style>
+    body, html { margin: 0; padding: 0; height: 100vh; overflow: hidden; }
+    #container { display: flex; height: 100%; width: 100%; }
+    #editor { flex: 1; min-width: 0; height: 100%; }
+    #preview { flex: 1; min-width: 0; height: 100%; border: none; }
+  </style>
+  <title>HTML 代码编辑器</title>
+</head>
+<body>
+  <div id="container">
+    <div id="editor"></div>
+    <iframe id="preview"></iframe>
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.33.0/min/vs/loader.min.js"></script>
+  <script>
+    require.config({ 
+      paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.33.0/min/vs' },
+      'vs/nls': { availableLanguages: { '*': 'zh-cn' } }
+    });
+    require(['vs/editor/editor.main'], function() {
+      var editor = monaco.editor.create(document.getElementById('editor'), {
+        value: '<!-- 在这里书写 HTML 代码 --> ',
+        language: 'html',
+        theme: 'vs-dark',
+        locale: 'zh-cn'
+      });
+
+      // 初始渲染并监听变化
+      updatePreview();
+      editor.onDidChangeModelContent(updatePreview);
+
+      function updatePreview() {
+        var html = editor.getValue();
+        var preview = document.getElementById('preview').contentWindow.document;
+        preview.open();
+        preview.write(html);
+        preview.close();
+      }
+
+      // 窗口大小变化时重新布局
+      window.addEventListener('resize', function() {
+        editor.layout();
+      });
+    });
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.33.0/min/vs/language/zh-cn.min.js"></script>
+</body>
+</html>
