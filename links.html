@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>快速访问链接</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #000;
+        font-family: "Microsoft YaHei", sans-serif;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;     /* 垂直居中 */
+        text-align: center;    /* 单栏场景更美观 */
+    }
+
+    .container {
+        width: 100%;
+        max-width: 1300px;
+        padding: 40px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+    /* 顶部大标题 */
+    .header-title {
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 50px;
+        letter-spacing: 4px;
+    }
+
+    /* 栏目容器（自动居中换行） */
+    .columns-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;   /* 水平居中 */
+        gap: 50px;                 /* 栏目之间间距 */
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* 单个栏目 */
+    .footer-column {
+        min-width: 180px;
+        max-width: 220px;
+    }
+
+    .column-title {
+        font-size: 18px;
+        font-weight: bold;
+        font-family: '宋体';
+        margin-bottom: 20px;
+    }
+    img {
+        width: 16px;
+    }
+
+    .footer-link {
+        display: block;
+        margin: 8px 0;
+        color: #d0d0d0;
+        font-size: 15px;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+    .footer-link:hover {
+        color: #fff;
+        text-decoration: underline;
+    }
+
+    /* ------- 响应式优化 ------- */
+
+    /* 手机端：所有栏目改为一列 */
+    @media(max-width: 600px) {
+        .columns-wrapper {
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+        .footer-column {
+            max-width: 250px;
+        }
+    }
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="header-title">MY LINKS</div>
+
+    <div class="columns-wrapper">
+        <!-- 栏目模板 -->
+        <!-- 
+                <div class="footer-column">
+                    <div class="column-title">软件</div>
+                    <a class="footer-link" href="#"></a>
+                </div> 
+        -->
+        <!-- 栏目示例 1 -->
+        <div class="footer-column">
+            <div class="column-title">软件</div>
+            <a class="footer-link" href="https://wwbwz.lanzoul.com/itfRQ3cmqu6f?webpage=V2ZWNgliBGQCYlQyUTcBN1o0BjsCIQs7CjtaaAVhBjdVbVU7WzdVNAUvAGc_c" bz="https://wwbwz.lanzoul.com/b00odibimd">
+                
+                极域破解</a>
+            <a class="footer-link" href="#"></a>
+            
+        </div>
+        <div class="footer-column">
+            <div class="column-title">网站</div>
+            <a class="footer-link" href="https://www.w3school.com.cn/">
+                <img src="https://www.w3school.com.cn/ui2019/logo-32-red.png">
+                w3school教程</a>
+            <a class="footer-link" href="https://www.doubao.com/chat/">
+                <img src="https://lf-flow-web-cdn.doubao.com/obj/flow-doubao/samantha/logo-icon-white-bg.png" alt="">
+                豆包</a>
+            <a class="footer-link" href="https://www.lanzoui.com/">
+                <img src="https://js.woozooo.com/assets/favicon.ico" alt="">
+                蓝奏:云存储</a>
+        </div> 
+        
+
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的快速访问</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #2e2925; /* 深棕背景 */
+      font-family: "Noto Sans JP", sans-serif;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-width: 600px;
+      padding: 20px;
+    }
+
+    img {
+      width: 100%;
+      max-width: 800px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      margin-bottom: 20px;
+    }
+
+    p {
+      margin: 10px 0 20px 0;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .btn {
+      background-color: #f5e4d4;
+      color: black;
+      font-weight: bold;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #e6d2c0;
+    }
+
+    /* 顶部右侧菜单图标 */
+    .menu {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .menu span {
+      display: block;
+      width: 25px;
+      height: 3px;
+      background: white;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+  <!-- 右上角菜单 -->
+  <div class="menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <div class="container">
+    <img src="https://bing.img.run/1920x1080.php" alt="進撃の巨人 最後の調査兵団募集">
+    <p>每日诗句<br/><span id="jinrishici-sentence">正在加载今日诗词....</span>
+<script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+</p>
+    <a href="https://docs.qq.com/doc/p/8b5b9d0b6a0806dc6cfd169dbce8d790de6c66cc" class="btn">前去~我的快速访问</a>
+  </div>
+</body>
+</html>
